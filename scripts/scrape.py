@@ -28,7 +28,9 @@ def find_categories(tree, names):
     return result
 
 
-DATA_DIR = "../data"
+DATA_DIR = os.path.join("data")
+MONTHLY_DIR = os.path.join(DATA_DIR, "monthly")
+
 pytrends = TrendReq(hl="en-US", tz=360, timeout=(10, 25))
 
 oecd_vars = dict()
@@ -93,7 +95,7 @@ for key in oecd_vars["groups"].keys():
             #     sleep=60,
             # )
             print(key, e)
-        df.to_csv(os.path.join(DATA_DIR, filename + ".csv"))
+        df.to_csv(os.path.join(MONTHLY_DIR, filename + ".csv"))
         time.sleep(60)
     else:
         for cat in categories:  # Needs tree traversal
@@ -136,8 +138,8 @@ for key in oecd_vars["groups"].keys():
                 # )
                 print(cat, e)
 
-            filename = filename + "_" + str(cat["id"])
-            df.to_csv(os.path.join(DATA_DIR, filename + ".csv"), mode="a")
+            filename = filename[:filename.find("_")] + "_" + str(cat["id"])
+            df.to_csv(os.path.join(MONTHLY_DIR, filename + ".csv"), mode="a")
             time.sleep(2)
 
 # indo_trending = pytrends.trending_searches(pn='indonesia')
